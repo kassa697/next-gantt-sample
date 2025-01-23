@@ -16,8 +16,8 @@ import TaskEditDialog from "@/components/task-edit-dialog";
 
 export default function Home() {
   const { tasks, isLoading, saveTasks } = useTasks();
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const onAddTask = (formData: {
@@ -27,7 +27,7 @@ export default function Home() {
     progress: number;
   }) => {
     handleAddTask(tasks, formData, saveTasks);
-    setIsAddModalOpen(false);
+    setIsAddDialogOpen(false);
   };
 
   const onUpdateTask = (formData: {
@@ -37,7 +37,7 @@ export default function Home() {
     progress: number;
   }) => {
     handleUpdateTask(tasks, selectedTask, formData, saveTasks);
-    setIsEditModalOpen(false);
+    setIsEditDialogOpen(false);
     setSelectedTask(null);
   };
 
@@ -53,8 +53,10 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="flex items-center justify-between w-full p-4">
         <h1 className="text-2xl font-bold">ガントチャート</h1>
+        {/* タスクを追加するボタン */}
         <button
-          onClick={() => setIsAddModalOpen(true)}
+          // ダイアログを開く
+          onClick={() => setIsAddDialogOpen(true)}
           className={cn(buttonVariants())}
         >
           タスクを追加
@@ -66,23 +68,24 @@ export default function Home() {
           tasks={tasks}
           onEdit={(task) => {
             setSelectedTask(task);
-            setIsEditModalOpen(true);
+            setIsEditDialogOpen(true);
           }}
           onDelete={onDeleteTask}
         />
       </div>
 
       <TaskAddDialog
-        isOpen={isAddModalOpen}
-        onRequestClose={() => setIsAddModalOpen(false)}
+        // trueになれば開く
+        isOpen={isAddDialogOpen}
+        onRequestClose={() => setIsAddDialogOpen(false)}
         onSubmit={onAddTask}
       />
 
       {selectedTask && (
         <TaskEditDialog
-          isOpen={isEditModalOpen}
+          isOpen={isEditDialogOpen}
           onRequestClose={() => {
-            setIsEditModalOpen(false);
+            setIsEditDialogOpen(false);
             setSelectedTask(null);
           }}
           onSubmit={onUpdateTask}
